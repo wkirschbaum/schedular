@@ -7,12 +7,9 @@ defmodule Schedular do
     import Supervisor.Spec, warn: false
 
     children = [
-      # Start the endpoint when the application starts
       supervisor(Schedular.Endpoint, []),
-      # Start the Ecto repository
       supervisor(Schedular.Repo, []),
-      # Here you could define other workers and supervisors as children
-      # worker(Schedular.Worker, [arg1, arg2, arg3]),
+      worker(Schedular.Worker, [])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
