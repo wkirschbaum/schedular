@@ -8,6 +8,9 @@ defmodule Schedular.Cron.Text do
       iex> Schedular.Cron.Text.parse "* * * * *"
       {:ok, "At every minute."}
 
+      iex> Schedular.Cron.Text.parse "1 * * * *"
+      {:ok, "At every minu"}
+
   Invalid syntax returns an error:
 
     iex> Schedular.Cron.Text.parse "invalid"
