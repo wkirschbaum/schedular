@@ -19,4 +19,21 @@ defmodule Schedular.Cron.Text.Helper do
       whole
     end
   end
+
+
+  def append_result({:ok, current}, {:ok, text}) do
+    {:ok, "#{current}#{text}"}
+  end
+
+  def append_result({:ok, _current}, {:error, reason}) do
+    {:error, reason}
+  end
+
+  def append_result({:error, current}, {:error, reason}) do
+    {:error, reason ++ current}
+  end
+
+  def append_result({:error, current}, _) do
+    {:error, current}
+  end
 end
