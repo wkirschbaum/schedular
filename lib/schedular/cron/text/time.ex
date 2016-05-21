@@ -1,7 +1,7 @@
 defmodule Schedular.Cron.Text.Time do
   alias Schedular.Cron.Text.Minute
   alias Schedular.Cron.Text.Hour
-  alias Schedular.Cron.Text.Helper
+  alias Schedular.Cron.Text.Result
 
   def parse("*", "*") do
     {:ok, "At every minute"}
@@ -9,28 +9,40 @@ defmodule Schedular.Cron.Text.Time do
 
   def parse("*", hour) do
     {:ok, "At every minute"}
-    |> Helper.append_result(Hour.parse(hour))
+    |> Result.append(stringify_hour(hour))
   end
 
   def parse(minute, "*") do
     {:ok, "At "}
-    |> Helper.append_result(Minute.parse(minute))
+    |> Result.append(stringify_minute(minute))
   end
 
   def parse(minute, hour) do
     {:ok, "At "}
-    |> Helper.append_result(parse_hour(hour))
-    |> Helper.append_result({:ok, ":"})
-    |> Helper.append_result(parse_minute(minute))
-    |> Helper.append_result({:ok, " every day"})
+    |> Result.append(padded_hour(hour))
+    |> Result.append({:ok, ":"})
+    |> Result.append(padded_minute(minute))
+    |> Result.append({:ok, " every day"})
   end
 
-  defp parse_minute(num) do
-    parse_num(num, 60, :invalid_minute)
+  defp stringify_minute(minute) do
+    parse_num(minute, 60, :invalid_minute)
+    |> Minute.parse
   end
 
-  defp parse_hour(num) do
-    parse_num(num, 24, :invalid_hour)
+  defp stringify_hour(minute) do
+    parse_num(minute, 24, :invalid_hour)
+    |> Hour.parse
+  end
+
+  defp padded_minute(minute) do
+    parse_num(minute, 60, :invalid_minute)
+    |> to_padded
+  end
+
+  defp padded_hour(hour) do
+    parse_num(hour, 24, :invalid_hour)
+    |> to_padded
   end
 
   def parse_num(num, max, type) do
@@ -38,16 +50,20 @@ defmodule Schedular.Cron.Text.Time do
     if whole < 0 || whole >= max || String.length(rest) > 0 do
       {:error, [type]}
     else
-      {:ok, pad_two(whole)}
+      {:ok, num}
     end
   end
 
-  defp pad_two(num) do
+  defp to_padded({:error, rest}) do
+    {:error, rest}
+  end
+
+  defp to_padded({:ok, num}) do
     case String.length("#{num}") do
       1 ->
-        "0#{num}"
+        {:ok, "0#{num}"}
       _ ->
-        num
+        {:ok, num}
     end
   end
 end

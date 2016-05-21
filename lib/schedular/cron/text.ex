@@ -1,6 +1,6 @@
 defmodule Schedular.Cron.Text do
   alias Schedular.Cron.Text.Time
-  alias Schedular.Cron.Text.Helper
+  alias Schedular.Cron.Text.Result
 
   @doc ~S"""
   Parses the given cron command into friendly text
@@ -24,8 +24,8 @@ defmodule Schedular.Cron.Text do
 
   defp parse_parts([minute, hour, _date, _month, _weekday]) do
     {:ok, ""}
-    |> Helper.append_result(Time.parse(minute, hour))
-    |> Helper.append_result({:ok, "."})
+    |> Result.append(Time.parse(minute, hour))
+    |> Result.append({:ok, "."})
   end
 
   defp parse_parts(_) do

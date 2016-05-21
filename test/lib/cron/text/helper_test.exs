@@ -4,22 +4,22 @@ defmodule Schedular.Cron.Text.Helper.Test do
   alias Schedular.Cron.Text.Helper
 
   test "'1' returns '1st'" do
-    assert Helper.number(1) == "1st"
+    assert Helper.number("1") == "1st"
   end
 
   test "'2' returns '2nd'" do
-    assert Helper.number(2) == "2nd"
+    assert Helper.number("2") == "2nd"
   end
 
   test "'3' returns '3rd'" do
-    assert Helper.number(3) == "3rd"
+    assert Helper.number("3") == "3rd"
   end
 
   test "'4' returns '4th'" do
-    assert Helper.number(4) == "4th"
+    assert Helper.number("4") == "4th"
   end
 
   test "'200' returns '200th'" do
-    assert Helper.number(200) == "200th"
+    assert Helper.number("200") == "200th"
   end
 end
